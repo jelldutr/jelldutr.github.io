@@ -1,23 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-    <meta charset="UTF-8">
-    <title>Moby Gent</title>
-    <meta name="description" content="Moby Gent">
-    <meta name="author" content="Jelle Dutry & Tomas Hoste">
-    <meta name="copyright" content="Copyright 2003-17 Arteveldehogeschool. Alle rechten voorbehouden.">
-    
-    <link rel="stylesheet" href="/main.css">
-
-</head>
+    {% include head.html %}
 <body>
-    <!-- Hier komt de structuur van de navigatie-header -->
-
-<!-- Kan misschien overbodig blijken, file dan verwijderen en ook de includes in andere files -->
+    {% include navigation.html %}
 
 <div class="container">
     <div class="title">
-        <h1>Moby Gent</h1>
+        <h1>{{ page.title }}</h1>
     </div>
     <div class="inputs">
         <div class="ikWilNaar">
@@ -42,8 +31,5 @@
 
 </div>
 
-<!-- Hier komt de structuur van de footer -->
-
-</body>
-</html>
+{% include footer.html %}
 
