@@ -1,5 +1,6 @@
 ---
 ---
+$background-color: #B4D6BA;
 
 /* CLEARFIX*/
 .cf:before,
@@ -20,7 +21,7 @@
 
 body {
     font-family: sans-serif;
-    background-color: #B4D6BA;
+    background-color: $background-color;
     background-image: url("images/clouds.png");
     background-repeat: repeat-x;
     background-size: contain;
@@ -44,3 +45,14 @@ body {
     background-size: contain;
 }
 
+.inputs {
+    display: inline-block;
+    width: 300px;
+    padding: 20px;
+    background-color: rgba(255,255,255,0.8);
+    border-radius: 20px;
+    position: relative;
+    top: 100px;
+    font-size: 2em;
+    line-height: 0.2em;
+}
