@@ -4,32 +4,36 @@
 <body>
     {% include navigation.html %}
 
-<div class="container">
-    <div class="title">
-        <h1>{{ page.title }}</h1>
-    </div>
-    <div class="inputs">
-        <div class="ikWilNaar">
-            <p>Ik wil naar ...</p>
-            <form>
-                <input type="text" placeholder="Adres...">
-            </form>
+<div class="container cf">
+    
+    <div class="content cf">
+        <div class="title">
+            <h1>{{ page.title }}</h1>
         </div>
-        <div class="metDe">
-            <p>Met de ...</p>
-            <form>
-                <input list="vervoermiddel">
-                <datalist id="vervoermiddel">
-                    <option value="Auto">
-                    <option value="Fiets">
-                    <option value="Openbaar Vervoer">
-                </datalist>
-                <input type="submit" value="Submit">
-            </form>
+        <div class="inputs">
+            <div class="ikWilNaar">
+                <p>Ik wil naar ...</p>
+                <form>
+                    <input type="text" placeholder="Adres...">
+                </form>
+            </div>
+            <div class="metDe">
+                <p>Met de ...</p>
+                <form>
+                    <input list="vervoermiddel">
+                    <datalist id="vervoermiddel">
+                        <option value="Auto">
+                        <option value="Fiets">
+                        <option value="Openbaar Vervoer">
+                    </datalist>
+                    <input type="submit" value="Submit">
+                </form>
+            </div>
         </div>
     </div>
-
 </div>
+
+<script src="js/main.js"></script>
 
 {% include footer.html %}
 
