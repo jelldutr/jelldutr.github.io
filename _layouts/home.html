@@ -13,20 +13,15 @@
         <div class="inputs">
             <div class="ikWilNaar">
                 <p>Ik wil naar</p>
-                <form>
-                    <input type="text" placeholder="Adres...">
-                </form>
-            </div>
-            <div class="metDe">
-                <p>Met de</p>
-                <form>
-                    <input list="vervoermiddel">
-                    <datalist id="vervoermiddel">
-                        <option value="Auto">
-                        <option value="Fiets">
-                        <option value="Openbaar Vervoer">
-                    </datalist>
-                    <input type="submit" value="Submit">
+                <form method="get">
+                    <input type="text" placeholder="Adres..." name="locat">
+                    <p>met de</p>
+                    <select id="vervoermiddel" name="transp">
+                        <option value="auto" selected>Auto</option>
+                        <option value="fiets">Fiets</option>
+                        <option value="ov">Openbaar Vervoer</option>
+                    </select>
+                    <input type="submit" value="Go!">
                 </form>
             </div>
         </div>
