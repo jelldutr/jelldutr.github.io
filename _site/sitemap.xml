@@ -8,10 +8,15 @@
 <loc>http://127.0.01:4000/about/</loc>
 </url>
 <url>
-<loc>http://127.0.01:4000/</loc>
+<loc>http://127.0.01:4000/auto.html</loc>
 </url>
 <url>
 <loc>http://127.0.01:4000/fiets.html</loc>
-<lastmod>2017-06-12T12:34:40+02:00</lastmod>
+</url>
+<url>
+<loc>http://127.0.01:4000/</loc>
+</url>
+<url>
+<loc>http://127.0.01:4000/ov.html</loc>
 </url>
 </urlset>

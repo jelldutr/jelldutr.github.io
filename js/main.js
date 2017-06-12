@@ -1,9 +1,12 @@
-/*function resizeScreen()
-            {
-                var heights = window.height;
-                document.getElementsByClassName("container").style.height = 200;
-            };
 
-window.onload = resizeScreen();
-window.onresize = resizeScreen();
-*/
+var urlLink = 'jelldutr.github.io/'
+// Aanpassen als website online komt!
+
+var locForm = document.getElementById("locForm")
+locForm.onsubmit = function redirect(e) {
+
+    e.preventDefault();
+    var x = locForm.transp.value + "/?locat=" + locForm.locat.value;
+
+    window.location = x;
+}
