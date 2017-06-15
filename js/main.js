@@ -1,27 +1,57 @@
+window.onload = function() {
 
-var urlLink = 'jelldutr.github.io/'
-// Aanpassen als website online komt!
+var gent = [51.054344, 3.721660]; // Start locatie
+/**
+ * Map Setup Leaflet & Mapbox
+ */
+var mymap = L.map('mapid').setView(gent, 14);
 
+L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}', {
+    attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="http://mapbox.com">Mapbox</a>',
+    maxZoom: 18,
+    id: 'mapbox.streets',
+    accessToken: 'pk.eyJ1IjoiamVsbGR1dHIiLCJhIjoiY2ozeTh0cTcyMDAxMjJ3bGJhdTR1cHVsbCJ9.mEm-yeidnWPkrugmE0PaQA'
+}).addTo(mymap);
 
 /**
- * Zorgt ervoor dat de gebruiker doorverwezen wordt naar de 
- * pagina van het vervoermiddel dat hij aangegeven heeft.
- * De locatie wordt meegegeven in de URL zoals de get-methode
- */
-var locForm = document.getElementById("locForm")
-locForm.onsubmit = function redirect(e) {
+ * Database Import Bezetting Parking
+*/ 
 
-    e.preventDefault();
-    var x = locForm.transp.value + "/?locat=" + locForm.locat.value;
+var url = 'https://datatank.stad.gent/4/mobiliteit/bezettingparkingsrealtime.json';
 
-    window.location = x;
-}
+function getJSON(url, successHandler, errorHandler){
+        var xhr = typeof XMLHttpRequest != 'undefined'
+            ? new XMLHttpRequest()
+            : new ActiveXObject('Microsoft.XMLHTTP');
+
+        xhr.onreadystatechange = function() {
+            if(xhr.readyState == 4){
+                if (xhr.status == 200) {
+                    var data = (!xhr.responseType)?JSON.parse(xhr.response):xhr.response;
+                    successHandler && successHandler(data);
+                } else {
+                    errorHandler && errorHandler(status);
+                }
+            }
+        };
+        xhr.open('get', url, true);
+        xhr.responseType = 'json';
+        xhr.send();
+    }
+
+getJSON(url,
+    function(data) {
+        for(var i in data){ //for in loop voor elk object
+            var marker = L.marker([data[i].latitude, data[i].longitude]).addTo(mymap); //voegt een marker toe
+            marker.bindPopup("<h3>"+data[i].name+"</h3><b> Vrije plaatsen: "+data[i].parkingStatus.availableCapacity+"</b>").openPopup();
+        }
+                
+    },
+    function(status) {
+        console.log(status);
+    }
+);
 
 
-/**
- * Google Maps Api map object aanmaken
- */
-map = new google.maps.Map(document.getElementById('map'), {
-  center: {lat: -34.397, lng: 150.644},
-  zoom: 8
-});
+
+} // End of ONLOAD function
