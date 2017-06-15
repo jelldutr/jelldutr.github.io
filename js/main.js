@@ -42,8 +42,8 @@ function getJSON(url, successHandler, errorHandler){
 getJSON(url,
     function(data) {
         for(var i in data){ //for in loop voor elk object
-            var marker = L.marker([data[i].latitude, data[i].longitude]).addTo(mymap); //voegt een marker toe
-            marker.bindPopup("<h3>"+data[i].name+"</h3><b> Vrije plaatsen: "+data[i].parkingStatus.availableCapacity+"</b>").openPopup();
+            var marker = L.marker([data[i].latitude, data[i].longitude],{icon: parkingIcon}).addTo(mymap); //voegt een marker toe
+            marker.bindPopup("<h3>"+data[i].name+"</h3><br /> <b> Vrije plaatsen: "+data[i].parkingStatus.availableCapacity+"</b>");
         }
                 
     },
@@ -52,6 +52,16 @@ getJSON(url,
     }
 );
 
+var parkingIcon = L.icon({
+    iconUrl: 'images/parkingpopup.png',
+    shadowUrl: 'images/parkingshadow.png',
+
+    iconSize: [25,41], //grootte van icon
+    shadowSize: [30,21], //grootte van schaduw
+    iconAnchor: [12,41], //ankerpunt icon
+    shadowAnchor: [0,21], // ankerpunt schaduw
+    popupAnchor: [0, -50] //ankerpunt popup
+});
 
 
 } // End of ONLOAD function
