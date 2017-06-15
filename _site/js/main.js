@@ -17,8 +17,14 @@ L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={
  * Database Import Bezetting Parking
 */ 
 
-var url = 'https://datatank.stad.gent/4/mobiliteit/bezettingparkingsrealtime.json';
+var url = 'https://datatank.stad.gent/4/mobiliteit/bezettingparkingsrealtime.json';//Database met bezettingsgraad van de parkings in Gent
 
+/**
+ * 
+ * @param {*Link naar Database, URL} url 
+ * @param {*actie die ondernomen wordt bij succesvol laden van DB} successHandler 
+ * @param {*actie die ondernomen wordt bij falen van laden DB} errorHandler 
+ */
 function getJSON(url, successHandler, errorHandler){
         var xhr = typeof XMLHttpRequest != 'undefined'
             ? new XMLHttpRequest()
@@ -37,8 +43,12 @@ function getJSON(url, successHandler, errorHandler){
         xhr.open('get', url, true);
         xhr.responseType = 'json';
         xhr.send();
-    }
-
+    
+}
+/**
+ * Aanroepen van de database en bepaalde handeling uitvoeren als succes
+ * indien een error: wegschrijven naar console
+ */
 getJSON(url,
     function(data) {
         for(var i in data){ //for in loop voor elk object
@@ -51,7 +61,9 @@ getJSON(url,
         console.log(status);
     }
 );
-
+/**
+ * Standaardicoon voor popup aanpassen naar nieuw icoon
+ */
 var parkingIcon = L.icon({
     iconUrl: 'images/parkingpopup.png',
     shadowUrl: 'images/parkingshadow.png',
