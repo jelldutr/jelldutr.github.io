@@ -107,18 +107,20 @@ function locatie () {
     };
 locatie();*/
 
-var googleSearchUrl = "https://maps.googleapis.com/maps/api/place/textsearch/json?query=" + window.name + "&key=AIzaSyDLpBgfSlOI_tOZyeWZ83VBYcgI88qc7qo";
+var googleSearchUrl = "https://maps.googleapis.com/maps/api/place/textsearch/json?query=" + window.name.replace(/[^a-zA-Z0-9-_]/g, '') + "&key=AIzaSyDLpBgfSlOI_tOZyeWZ83VBYcgI88qc7qo";
 
 getJSON(googleSearchUrl,
     function(data) {
         for(var i in data){ //for in loop voor elk object
-        console.log(data[i].results.geometry.location.lat)
-        }                
+            var marker = L.marker([data[i].latitude, data[i].longitude]).addTo(mymap); //voegt een marker toe
+            marker.bindPopup("<h3>"+data[i].name+"</h3><br /> <b> Vrije plaatsen: "+data[i].parkingStatus.availableCapacity+"</b>");        }                
     },
     function(status) {
         console.log(status);
     }
 );
+
+console.log(googleSearchUrl);
 
 
 } // End of ONLOAD function
