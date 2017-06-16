@@ -76,51 +76,24 @@ var parkingIcon = L.icon({
 });
 
 
-/*var input = "Gent, België";
-var searchBox = new google.maps.places.SearchBox(input);
-console.log("hey" + searchBox);
 
-function locatie () {
-      var place = searchBox.getPlace();
+var request = {
+    query: window.name
+};
 
-      if (places.length == 0) {
-        return;
-      }
-
-      var group = L.featureGroup();
-
-      places.forEach(function(place) {
-
-        // Create a marker for each place.
-        console.log(places);
-        console.log(place.geometry.location.lat() + " / " + place.geometry.location.lng());
-        var marker = L.marker([
-          place.geometry.location.lat(),
-          place.geometry.location.lng()
-        ]);
-        group.addLayer(marker);
-      });
-
-      group.addTo(mymap);
-      map.fitBounds(group.getBounds());
-
-    };
-locatie();*/
-
-var googleSearchUrl = "https://maps.googleapis.com/maps/api/place/textsearch/json?query=" + window.name.replace(/[^a-zA-Z0-9-_]/g, '') + "&key=AIzaSyDLpBgfSlOI_tOZyeWZ83VBYcgI88qc7qo";
-
-getJSON(googleSearchUrl,
-    function(data) {
-        for(var i in data){ //for in loop voor elk object
-            var marker = L.marker([data[i].latitude, data[i].longitude]).addTo(mymap); //voegt een marker toe
-            marker.bindPopup("<h3>"+data[i].name+"</h3><br /> <b> Vrije plaatsen: "+data[i].parkingStatus.availableCapacity+"</b>");        }                
-    },
-    function(status) {
-        console.log(status);
+service = new google.maps.places.PlacesService(document.createElement('div'));
+service.textSearch(request, callback);
+function callback(results, status){
+    if (status == google.maps.places.PlacesServiceStatus.OK) {
+        for (var i = 0; i < results.length; i++) {
+            var marker = L.marker([results[i].geometry.location.lat(), results[i].geometry.location.lng()]).addTo(mymap); //voegt een marker toe
+            marker.bindPopup(results[i].formatted_address).openPopup; //voegt een popup toe aan de marker met de zoekterm
+            mymap.setView([results[i].geometry.location.lat(), results[i].geometry.location.lng()], 14); // centreerd de kaart op de gekozen locatie
+        }
     }
-);
+}
 
-console.log(googleSearchUrl);
+window.name = "";
 
 
 } // End of ONLOAD function
