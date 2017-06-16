@@ -21,9 +21,9 @@ var url = 'https://datatank.stad.gent/4/mobiliteit/bezettingparkingsrealtime.jso
 
 /**
  * 
- * @param {*Link naar Database, URL} url 
- * @param {*actie die ondernomen wordt bij succesvol laden van DB} successHandler 
- * @param {*actie die ondernomen wordt bij falen van laden DB} errorHandler 
+ * @param {*string} url Url naar de online Database
+ * @param {*function} successHandler Functie die uitgevoerd wordt bij succesvol laden DB
+ * @param {*function} errorHandler Functie die uitgevoerd wordt bij falen laden DB
  */
 function getJSON(url, successHandler, errorHandler){
         var xhr = typeof XMLHttpRequest != 'undefined'
@@ -62,7 +62,7 @@ getJSON(url,
     }
 );
 /**
- * Standaardicoon voor popup aanpassen naar nieuw icoon
+ * Standaardicoon voor popup aanpassen naar nieuw icoon Parking
  */
 var parkingIcon = L.icon({
     iconUrl: 'images/parkingpopup.png',
@@ -74,6 +74,51 @@ var parkingIcon = L.icon({
     shadowAnchor: [0,21], // ankerpunt schaduw
     popupAnchor: [0, -50] //ankerpunt popup
 });
+
+
+/*var input = "Gent, België";
+var searchBox = new google.maps.places.SearchBox(input);
+console.log("hey" + searchBox);
+
+function locatie () {
+      var place = searchBox.getPlace();
+
+      if (places.length == 0) {
+        return;
+      }
+
+      var group = L.featureGroup();
+
+      places.forEach(function(place) {
+
+        // Create a marker for each place.
+        console.log(places);
+        console.log(place.geometry.location.lat() + " / " + place.geometry.location.lng());
+        var marker = L.marker([
+          place.geometry.location.lat(),
+          place.geometry.location.lng()
+        ]);
+        group.addLayer(marker);
+      });
+
+      group.addTo(mymap);
+      map.fitBounds(group.getBounds());
+
+    };
+locatie();*/
+
+var googleSearchUrl = "https://maps.googleapis.com/maps/api/place/textsearch/json?query=" + window.name + "&key=AIzaSyDLpBgfSlOI_tOZyeWZ83VBYcgI88qc7qo";
+
+getJSON(googleSearchUrl,
+    function(data) {
+        for(var i in data){ //for in loop voor elk object
+        console.log(data[i].results.geometry.location.lat)
+        }                
+    },
+    function(status) {
+        console.log(status);
+    }
+);
 
 
 } // End of ONLOAD function
