@@ -18,14 +18,18 @@ window.onload = function(){
  * Voegt de Google Places zoekbar toe.
  * Men kan dus gebruik maken van de autofill.
  */
+var standardBounds = new google.maps.LatLngBounds( //bepaald het kader waarbinnen de zoektermen gespecifieerd worden
+  new google.maps.LatLng(51.012670, 3.647824),
+  new google.maps.LatLng(51.112838, 3.831590));
 
 var input = document.getElementById("goTo");
-var searchBox = new google.maps.places.SearchBox(input);
-/*searchBox.addListener('places_changed', function(){
-    var place = searchBox.getPlaces();
-    var lat = place.geometry.location.lat();
-    var lng = place.geometry.location.lng();
-    console.log(place);
-});*/
+
+var autocomplete = new google.maps.places.Autocomplete(input);
+
+autocomplete.setOptions({ //zet instellingen autocomplete
+  bounds: standardBounds,
+  types: ['geocode'] //zorgt ervoor dat enkel plaatsen met een vast adres getoond worden
+})
+
 
 }
