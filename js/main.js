@@ -1,23 +1,25 @@
 window.onload = function() {
 
 var gent = [51.054344, 3.721660]; // Start locatie
+var zoom = 14; //Start zoom
 /**
  * Map Setup Leaflet & Mapbox
  */
-var mymap = L.map('mapid').setView(gent, 14);
+var mymap = L.map('mapid').setView(gent, zoom);
 
-L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}', {
+var standardMap = L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}', {
     attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="http://mapbox.com">Mapbox</a>',
     maxZoom: 18,
     id: 'mapbox.streets',
     accessToken: 'pk.eyJ1IjoiamVsbGR1dHIiLCJhIjoiY2ozeTh0cTcyMDAxMjJ3bGJhdTR1cHVsbCJ9.mEm-yeidnWPkrugmE0PaQA'
 }).addTo(mymap);
 
+
 /**
  * Database Import Bezetting Parking
 */ 
 
-var url = 'https://datatank.stad.gent/4/mobiliteit/bezettingparkingsrealtime.json';//Database met bezettingsgraad van de parkings in Gent
+var urlParking = 'https://datatank.stad.gent/4/mobiliteit/bezettingparkingsrealtime.json';//Database met bezettingsgraad van de parkings in Gent
 
 /**
  * 
@@ -49,7 +51,7 @@ function getJSON(url, successHandler, errorHandler){
  * Aanroepen van de database en bepaalde handeling uitvoeren als succes
  * indien een error: wegschrijven naar console
  */
-getJSON(url,
+getJSON(urlParking,
     function(data) {
         for(var i in data){ //for in loop voor elk object
             var marker = L.marker([data[i].latitude, data[i].longitude],{icon: parkingIcon}).addTo(mymap); //voegt een marker toe
@@ -75,11 +77,17 @@ var parkingIcon = L.icon({
     popupAnchor: [0, -50] //ankerpunt popup
 });
 
-
+/**
+ * Haalt de zoekterm van de vorige pagina uit window.name
+ * google Places zoekt naar de locatie en maakt een marker op
+ * dat bepaalde punt.
+ */
 
 var request = {
     query: window.name
 };
+var mapCenterLat = ""; 
+var mapCenterLng = ""; //variabelen aanmaken voor nieuwe Lat en Lng;
 
 service = new google.maps.places.PlacesService(document.createElement('div'));
 service.textSearch(request, callback);
@@ -88,12 +96,36 @@ function callback(results, status){
         for (var i = 0; i < results.length; i++) {
             var marker = L.marker([results[i].geometry.location.lat(), results[i].geometry.location.lng()]).addTo(mymap); //voegt een marker toe
             marker.bindPopup(results[i].formatted_address).openPopup; //voegt een popup toe aan de marker met de zoekterm
-            mymap.setView([results[i].geometry.location.lat(), results[i].geometry.location.lng()], 14); // centreerd de kaart op de gekozen locatie
+            mymap.setView([results[i].geometry.location.lat(), results[i].geometry.location.lng()], zoom); // centreerd de kaart op de gekozen locatie
+
         }
     }
 }
 
-window.name = "";
+window.name = ""; //Cleart window.name
+
+/**
+ * Voegt de kaartlaag van Tomtom met trafficflow toe aan de kaart
+ */
+
+var trafficMap = L.tileLayer('https://api.tomtom.com/traffic/map/4/tile/flow/relative-delay/{z}/{x}/{y}.png{key}', {
+     tms: false,
+     opacity: 0.7,
+     key: "?key=GSOOmhRUjrwOlv4gtlX86BMCdhAr1hgE"
+}).addTo(mymap);
+
+var incidentMap = L.tileLayer('https://api.tomtom.com/traffic/map/4/tile/incidents/s1/{z}/{x}/{y}.png{key}', {
+     tms: false,
+     opacity: 0.7,
+     key: "?key=GSOOmhRUjrwOlv4gtlX86BMCdhAr1hgE"
+}).addTo(mymap);
+
+var overlays = {
+    "Verkeersdrukte": trafficMap,
+    "Verkeersincidenten": incidentMap
+};
+
+L.control.layers("", overlays).addTo(mymap);
 
 
 } // End of ONLOAD function

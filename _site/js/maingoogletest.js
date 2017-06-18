@@ -1,3 +1,10 @@
+/**
+ * Dit bestand bestaat uit fragmenten code die ik gebruikt heb maar op een gegeven moment
+ * overbodig bleken. Ik zet ze dan hierin omdat ik er geen afstand van kan doen en ze
+ * misschien nog nodig kan zijn later. :)
+ */
+
+
 window.onload = function(){
 
 /**
@@ -81,3 +88,26 @@ getJSON(googleSearchUrl,
 );
 
 console.log(googleSearchUrl);*/
+
+
+//urlTraffic =  "https://api.tomtom.com/traffic/map/4/tile/flow/relative/12/2044/1360.png?key=GSOOmhRUjrwOlv4gtlX86BMCdhAr1hgE";
+
+var getTileLayerPoints = function (lat, lng, zoom) {
+    var x = (Math.floor((lng + 180) / 360 * Math.pow(2, zoom)));
+    var y = (Math.floor((1-Math.log(Math.tan(lat * Math.PI / 180) + 1 / Math.cos(lat * Math.PI / 180)) / Math.PI) / 2 * Math.pow(2, zoom)));
+
+    var layerPoint = {
+        x: x,
+        y: y
+    };
+
+    return layerPoint;
+}
+console.log(gent[0]);
+console.log(gent[1]);
+console.log(getTileLayerPoints(gent[0], gent[1], zoom));
+
+var layerPoint = getTileLayerPoints(gent[0], gent[1], zoom);
+
+//urlTraffic = "https://api.tomtom.com/traffic/map/4/tile/flow/relative/"+ zoom + "/" + layerPoint.x + "/" + layerPoint.y + ".png";
+
