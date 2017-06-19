@@ -140,53 +140,21 @@ var overlays = {
  */
 L.control.layers("", overlays).addTo(mymap);
 
-var reistijdObject = {
-    brusselgent: {
-        traject: "Brussel - Gent",
-        start: {lat: 50.871557, lng: 4.287810},
-        end: {lat: 51.037383, lng: 3.733143}},
-    antwerpengent: {
-        traject: "Antwerpen - Gent",
-        start: {lat: 51.190788, lng: 4.412466},
-        end: {lat: 51.037383, lng: 3.733143}},
-    oostendegent: {
-        traject: "Oostende - Gent",
-        start: {lat: 51.219017, lng: 2.923636},
-        end: {lat: 51.037383, lng: 3.733143}},
-    kortrijkgent: {
-        traject: "Kortrijk - Gent",
-        start: {lat: 50.814343, lng: 3.268458},
-        end: {lat: 51.037383, lng: 3.733143}},
-};
 
-for(var i in reistijdObject) {
-
-var directionsService = new google.maps.DirectionsService();
-    var start = reistijdObject[i].start;
-    var end = reistijdObject[i].end;
-    var traject = reistijdObject[i].traject;
-    //var pId = reistijdObject[i];
+    var directionsService = new google.maps.DirectionsService();
+    var start = {lat: 51.037383, lng: 3.733143};
+    var end ={lat: 50.873554, lng: 4.284851};
     var request = {
         origin: start,
         destination: end,
-        travelMode: 'DRIVING',
+        travelMode: 'DRIVING'
     };
-    var p = document.createElement("p");
-    p.innerHTML = traject;
-    document.getElementById('steden').appendChild(p);
-    
-
     directionsService.route(request, function(result, status) {
         if (status == 'OK') {
-        var t = document.createElement("p");
-        t.innerHTML = result.routes[0].legs[0].duration.text;
-        document.getElementById('duur').appendChild(t);
+        //directionsDisplay.setDirections(result);
+        console.log(result);
         }
     });
-}
-
-
-    
 
 
 } // End of ONLOAD function

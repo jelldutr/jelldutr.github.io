@@ -110,22 +110,83 @@ window.name = ""; //Cleart window.name
 
 var trafficMap = L.tileLayer('https://api.tomtom.com/traffic/map/4/tile/flow/relative-delay/{z}/{x}/{y}.png{key}', {
      tms: false,
+     attribution: "Verkeersinformatie door Tomtom",
      opacity: 0.7,
      key: "?key=GSOOmhRUjrwOlv4gtlX86BMCdhAr1hgE"
 }).addTo(mymap);
+
+/**
+ * Voegt de kaartlaag van Tomtom met trafficincidents toe aan de kaart
+ */
 
 var incidentMap = L.tileLayer('https://api.tomtom.com/traffic/map/4/tile/incidents/s1/{z}/{x}/{y}.png{key}', {
      tms: false,
+     attribution: "Verkeersinformatie door Tomtom",
      opacity: 0.7,
      key: "?key=GSOOmhRUjrwOlv4gtlX86BMCdhAr1hgE"
 }).addTo(mymap);
 
+
+/**
+ * Maakt een layergroup overlays
+ */
 var overlays = {
     "Verkeersdrukte": trafficMap,
     "Verkeersincidenten": incidentMap
 };
 
+/**
+ * Maakt een layer controller waarbij de overlays uit of ingeschakeld kunnen worden.
+ */
 L.control.layers("", overlays).addTo(mymap);
+
+var reistijdObject = {
+    brusselgent: {
+        traject: "Brussel - Gent",
+        start: {lat: 50.871557, lng: 4.287810},
+        end: {lat: 51.037383, lng: 3.733143}},
+    antwerpengent: {
+        traject: "Antwerpen - Gent",
+        start: {lat: 51.190788, lng: 4.412466},
+        end: {lat: 51.037383, lng: 3.733143}},
+    oostendegent: {
+        traject: "Oostende - Gent",
+        start: {lat: 51.219017, lng: 2.923636},
+        end: {lat: 51.037383, lng: 3.733143}},
+    kortrijkgent: {
+        traject: "Kortrijk - Gent",
+        start: {lat: 50.814343, lng: 3.268458},
+        end: {lat: 51.037383, lng: 3.733143}},
+};
+
+for(var i in reistijdObject) {
+
+var directionsService = new google.maps.DirectionsService();
+    var start = reistijdObject[i].start;
+    var end = reistijdObject[i].end;
+    var traject = reistijdObject[i].traject;
+    //var pId = reistijdObject[i];
+    var request = {
+        origin: start,
+        destination: end,
+        travelMode: 'DRIVING',
+    };
+    var p = document.createElement("p");
+    p.innerHTML = traject;
+    document.getElementById('steden').appendChild(p);
+    
+
+    directionsService.route(request, function(result, status) {
+        if (status == 'OK') {
+        var t = document.createElement("p");
+        t.innerHTML = result.routes[0].legs[0].duration.text;
+        document.getElementById('duur').appendChild(t);
+        }
+    });
+}
+
+
+    
 
 
 } // End of ONLOAD function
