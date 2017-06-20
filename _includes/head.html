@@ -26,7 +26,8 @@
     <link rel="icon" type="image/png" sizes="96x96" href="/favicon-96x96.png">
     <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
 
-    <script src="js/main.js" type="text/javascript"></script>
+    <!-- INCLUDE OF MAIN JAVASCRIPT -->
+    <!--<script src="js/main.js" type="text/javascript"></script>-->
     
 
     <!-- Font Awesonme Icon CDN -->
@@ -44,6 +45,9 @@
     <script src="https://unpkg.com/leaflet@1.0.3/dist/leaflet.js" integrity="sha512-A7vV8IFfih/D732iSSKi20u/ooOfj/AGehOKq0f4vLT1Zr2Y+RX7C+w8A1gaSasGtRUZpF/NZgzSAu4/Gc41Lg==" crossorigin=""></script>
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.0.3/dist/leaflet.css" integrity="sha512-07I2e+7D8p6he1SIM+1twR5TIrhUQn9+I6yjqD53JQjFiMf8EtC93ty0/5vJTZGF8aAocvHYNEDJajGdNx1IsQ==" crossorigin=""/>
 
+
+    <!-- Dit laadt de custom javascript voor de pagina
+        het template dat gekozen wordt pas je aan in het " .md" bestand -->
     {% if page.custom_js %}
         {% for js_file in page.custom_js %}
         <script src='/js/{{ js_file }}.js' type="text/javascript"></script>

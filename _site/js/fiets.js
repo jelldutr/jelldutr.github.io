@@ -19,7 +19,7 @@ var standardMap = L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.
  * Database Import Bezetting Parking
 */ 
 
-var urlParking = 'https://datatank.stad.gent/4/mobiliteit/bezettingparkingsrealtime.json';//Database met bezettingsgraad van de parkings in Gent
+var urlFietspunt = 'https://datatank.stad.gent/4/mobiliteit/fietsdienstverlening.geojson';//Database met bezettingsgraad van de parkings in Gent
 
 /**
  * 
@@ -47,27 +47,23 @@ function getJSON(url, successHandler, errorHandler){
         xhr.send();
     
 }
-/**
- * Aanroepen van de database en bepaalde handeling uitvoeren als succes
- * indien een error: wegschrijven naar console
- */
-getJSON(urlParking,
+
+getJSON(urlFietspunt,
     function(data) {
-        for(var i in data){ //for in loop voor elk object
-            var marker = L.marker([data[i].latitude, data[i].longitude],{icon: parkingIcon}).addTo(mymap); //voegt een marker toe
-            marker.bindPopup("<h3>"+data[i].name+"</h3><br /> <b> Vrije plaatsen: "+data[i].parkingStatus.availableCapacity+"</b>");
-        }
-                
+        for (var i in data.coordinates){
+            var marker = L.marker([data.coordinates[i]["1"], data.coordinates[i]["0"]],{icon: fietsIcon}).addTo(mymap); //voegt een marker toe
+            marker.bindPopup("Fietsen Dienstverleningspunt");
+        }            
     },
     function(status) {
         console.log(status);
     }
 );
 /**
- * Standaardicoon voor popup aanpassen naar nieuw icoon Parking
+ * Standaardicoon voor popup aanpassen naar nieuw icoon Fietsvoorziening
  */
-var parkingIcon = L.icon({
-    iconUrl: 'images/parkingpopup.png',
+var fietsIcon = L.icon({
+    iconUrl: 'images/fietsicon.png',
     shadowUrl: 'images/parkingshadow.png',
 
     iconSize: [25,41], //grootte van icon
@@ -76,6 +72,49 @@ var parkingIcon = L.icon({
     shadowAnchor: [0,21], // ankerpunt schaduw
     popupAnchor: [0, -50] //ankerpunt popup
 });
+
+var urlBlueBikeSP = "https://datatank.stad.gent/4/mobiliteit/bluebikedeelfietsensintpieters"
+
+getJSON(urlBlueBikeSP,
+    function(data) {
+        for (var i in data){
+            var marker = L.marker([data.geometry.coordinates["1"], data.geometry.coordinates["0"]],{icon: bluebikeIcon}).addTo(mymap); //voegt een marker toe
+            marker.bindPopup("<h3>Bluebike Afhaalpunt G-S-P</h3><br /> <b> Vrije fietsen: "+data.properties.attributes["2"].value+"</b>"); //voegt een popup met info toe
+        }            
+    },
+    function(status) {
+        console.log(status);
+    }
+);
+
+var urlBlueBikeDP = "https://datatank.stad.gent/4/mobiliteit/bluebikedeelfietsendampoort"
+
+getJSON(urlBlueBikeDP,
+    function(data) {
+        for (var i in data){
+            var marker = L.marker([data.geometry.coordinates["1"], data.geometry.coordinates["0"]],{icon: bluebikeIcon}).addTo(mymap); //voegt een marker toe
+            marker.bindPopup("<h3>Bluebike Afhaalpunt Dampoort</h3><br /> <b> Vrije fietsen: "+data.properties.attributes["2"].value+"</b>"); //voegt een popup met info toe
+        }            
+    },
+    function(status) {
+        console.log(status);
+    }
+);
+
+/**
+ * Standaardicoon voor popup aanpassen naar nieuw icoon Fietsvoorziening
+ */
+var bluebikeIcon = L.icon({
+    iconUrl: 'images/bluebikeicon.png',
+    shadowUrl: 'images/parkingshadow.png',
+
+    iconSize: [25,41], //grootte van icon
+    shadowSize: [30,21], //grootte van schaduw
+    iconAnchor: [12,41], //ankerpunt icon
+    shadowAnchor: [0,21], // ankerpunt schaduw
+    popupAnchor: [0, -50] //ankerpunt popup
+});
+
 
 /**
  * Haalt de zoekterm van de vorige pagina uit window.name
@@ -104,57 +143,4 @@ function callback(results, status){
 
 window.name = ""; //Cleart window.name
 
-/**
- * Voegt de kaartlaag van Tomtom met trafficflow toe aan de kaart
- */
-
-var trafficMap = L.tileLayer('https://api.tomtom.com/traffic/map/4/tile/flow/relative-delay/{z}/{x}/{y}.png{key}', {
-     tms: false,
-     attribution: "Verkeersinformatie door Tomtom",
-     opacity: 0.7,
-     key: "?key=GSOOmhRUjrwOlv4gtlX86BMCdhAr1hgE"
-}).addTo(mymap);
-
-/**
- * Voegt de kaartlaag van Tomtom met trafficincidents toe aan de kaart
- */
-
-var incidentMap = L.tileLayer('https://api.tomtom.com/traffic/map/4/tile/incidents/s1/{z}/{x}/{y}.png{key}', {
-     tms: false,
-     attribution: "Verkeersinformatie door Tomtom",
-     opacity: 0.7,
-     key: "?key=GSOOmhRUjrwOlv4gtlX86BMCdhAr1hgE"
-}).addTo(mymap);
-
-
-/**
- * Maakt een layergroup overlays
- */
-var overlays = {
-    "Verkeersdrukte": trafficMap,
-    "Verkeersincidenten": incidentMap
-};
-
-/**
- * Maakt een layer controller waarbij de overlays uit of ingeschakeld kunnen worden.
- */
-L.control.layers("", overlays).addTo(mymap);
-
-
-    var directionsService = new google.maps.DirectionsService();
-    var start = {lat: 51.037383, lng: 3.733143};
-    var end ={lat: 50.873554, lng: 4.284851};
-    var request = {
-        origin: start,
-        destination: end,
-        travelMode: 'DRIVING'
-    };
-    directionsService.route(request, function(result, status) {
-        if (status == 'OK') {
-        //directionsDisplay.setDirections(result);
-        console.log(result);
-        }
-    });
-
-
-} // End of ONLOAD function
+}
