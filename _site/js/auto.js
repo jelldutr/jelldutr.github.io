@@ -167,8 +167,7 @@ var incidentMap = L.tileLayer('https://api.tomtom.com/traffic/map/4/tile/inciden
  */
 var overlays = {
     "Verkeersdrukte": trafficMap,
-    "Verkeersincidenten": incidentMap,
-    "Parkeerautomaten": parkeerAutom
+    "Verkeersincidenten": incidentMap
 };
 
 /**
@@ -197,26 +196,38 @@ var reistijdObject = {
 
 for(var i in reistijdObject) {
 
-var directionsService = new google.maps.DirectionsService();
+    var directionsService = new google.maps.DirectionsService();
     var start = reistijdObject[i].start;
     var end = reistijdObject[i].end;
-    var traject = reistijdObject[i].traject;
-    //var pId = reistijdObject[i];
+
+    var date = new Date(Date.now());
     var request = {
         origin: start,
         destination: end,
         travelMode: 'DRIVING',
+        drivingOptions: {
+            departureTime: date
+        }
     };
-    var p = document.createElement("p");
-    p.innerHTML = traject;
-    document.getElementById('steden').appendChild(p);
     
-
     directionsService.route(request, function(result, status) {
         if (status == 'OK') {
         var t = document.createElement("p");
-        t.innerHTML = result.routes[0].legs[0].duration.text;
-        document.getElementById('duur').appendChild(t);
+        startLoc= result.routes[0].legs[0].start_location;
+        if (startLoc == "(50.8713565, 4.287413499999957)"){
+            traject = "Brussel - Gent";
+        }; 
+        if (startLoc == "(51.1907805, 4.4124663000000055)"){
+            traject = "Antwerpen - Gent";
+        };
+        if (startLoc == "(51.21839689999999, 2.923574300000041)"){
+            traject = "Oostende - Gent";
+        };
+        if (startLoc == "(50.8145271, 3.2677426000000196)"){
+            traject = "Kortrijk - Gent";
+        };
+        t.innerHTML = traject + ": <span class='rightalign'>" + result.routes[0].legs[0].duration_in_traffic.text + "</span>";
+        document.getElementById('stedenduur').appendChild(t);
         }
     });
 }
