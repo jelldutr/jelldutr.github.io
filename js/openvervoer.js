@@ -111,19 +111,22 @@ var urlObjDeLijn = {
 };
 
 var haltesObj = {};
-var haltes = {};
 
 for (var r in urlObjDeLijn){
     getJSON(urlObjDeLijn[r],
         function(data) {
             for (var i in data.rtLijnRitten){
                 for (var t in data.rtLijnRitten[i].rtDoortochten){
+                    if (data.rtLijnRitten[i].rtDoortochten[t*2] != undefined){
                     var haltes = L.marker([data.rtLijnRitten[i].rtDoortochten[t*2].coordinaat.lt, data.rtLijnRitten[i].rtDoortochten[t*2].coordinaat.ln],{icon: tramIcon}).addTo(mymap);
                     haltesObj[data.rtLijnRitten[i].rtDoortochten[t*2].halteNummer] = haltesObj[data.rtLijnRitten[i].rtDoortochten[t*2].halteNummer] + ", " + data.lijnNummerPubliek;
                     haltesObj[data.rtLijnRitten[i].rtDoortochten[t*2].halteNummer] = haltesObj[data.rtLijnRitten[i].rtDoortochten[t*2].halteNummer].replace('undefined, ', "");
                     haltes.bindPopup("<b>" + data.rtLijnRitten[i].rtDoortochten[t*2].omschrijvingLang + "</b></br>Lijn(en): " + haltesObj[data.rtLijnRitten[i].rtDoortochten[t*2].halteNummer]);
+                    }
                 }
-            }           
+                
+            }
+
         },
         function(status) {
             console.log(status);
@@ -147,7 +150,7 @@ var tramIcon = L.icon({
 
 /**
  * Maakt een layergroup overlays
- */
+ 
 var overlays = {
     "Bus- en Tramhaltes": haltes,
     "Taxi-staanplaatsen": taxi    
@@ -156,7 +159,7 @@ var overlays = {
 /**
  * Maakt een layer controller waarbij de overlays uit of ingeschakeld kunnen worden.
  */
-L.control.layers("", overlays).addTo(mymap);
+//L.control.layers("", overlays).addTo(mymap);
 
 /**
  * Haalt de zoekterm van de vorige pagina uit window.name
