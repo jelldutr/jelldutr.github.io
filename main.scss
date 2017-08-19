@@ -108,24 +108,32 @@ body {
 }
 
 .block {
-    width: 29%;
+    width: 27.7%;
     min-width: 240px;
     float: left;
     margin: 10px 0;
 
 }
 
-#twitter {
-    height: 300px;
+#trafficdiv {
+    height: 400px;
     margin-left: 5%;
 
 }
 
-#reistijden {
+#twitter {
+    height: 400px;
+}
+
+.infoblock {
     background-color: white;
-    margin: 10px 2%;
+    margin: 10px;
     border-radius: 4px;
-    padding: 10px;
+    padding: 0 10px;
+}
+
+#vrijefietsen {
+    margin-left: 5%
 }
 
 .rightalign {
@@ -139,4 +147,54 @@ body {
     width: 960px;
     margin: 0 auto;
     margin-top: 250px;
+}
+
+.site-header {
+
+    .header-bar {
+        width: 90%;
+        margin: 5px auto;
+        background-color: white;
+        border-radius: 5px;
+        text-align: center;
+    }
+
+    .button {
+        text-decoration: none;
+        color: $background-color;
+        border: 2px solid $background-color;
+        border-radius: 7px;
+        font-size: 1.5em;
+        font-weight: 300;
+        padding: 5px 10px;
+        margin: 10px;
+        display: block;
+        float: left;
+
+    }
+
+    .site-title {
+        text-decoration: none;
+        color: $background-color;
+        font-size: 2em;
+        padding: 10px;
+        display: inline-block;
+        margin: 0;
+        text-transform: uppercase;
+        font-weight: bold;
+    
+    }
+}
+
+.righttextalign {
+    display: block;
+    float: right;
+}
+
+.halfblock {
+    width: 11%;
+    min-width: 160px;
+    float: left;
+    margin: 10px;
+
 }

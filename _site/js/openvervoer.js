@@ -14,6 +14,92 @@ var standardMap = L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.
     accessToken: 'pk.eyJ1IjoiamVsbGR1dHIiLCJhIjoiY2ozeTh0cTcyMDAxMjJ3bGJhdTR1cHVsbCJ9.mEm-yeidnWPkrugmE0PaQA'
 }).addTo(mymap);
 
+/**
+ * Huidige locatie opvragen en marker zetten
+ */
+
+var currentPosition = {
+    _latlng: {
+        lat: "",
+        lng:""
+    }
+};
+function getLocation() {
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(showPosition,showError);
+    } else {
+        console.log("Geolocation is not supported by this browser.");
+    }
+};
+
+function showPosition(position) {
+    currentPosition = L.marker([position.coords.latitude, position.coords.longitude]).addTo(mymap);
+    currentPosition.bindPopup("Hier ben ik");
+};
+
+function showError(error) {
+    switch(error.code) {
+        case error.PERMISSION_DENIED:
+            console.log("User denied the request for Geolocation.");
+            myLocation = {};
+            break;
+        case error.POSITION_UNAVAILABLE:
+            console.log("Location information is unavailable.");
+            myLocation = {};
+            break;
+        case error.TIMEOUT:
+            console.log("The request to get user location timed out.");
+            myLocation = {};
+            break;
+        case error.UNKNOWN_ERROR:
+            console.log("An unknown error occurred.");
+            myLocation = {};
+            break;
+    }
+}
+getLocation();
+
+/**
+ * Haalt de zoekterm van de vorige pagina uit window.name
+ * google Places zoekt naar de locatie en maakt een marker op
+ * dat bepaalde punt.
+ */
+
+var request = {
+    query: window.name
+};
+var eindLocatie = {};
+
+service = new google.maps.places.PlacesService(document.createElement('div'));
+service.textSearch(request, callback);
+function callback(results, status){
+    if (status == google.maps.places.PlacesServiceStatus.OK) {
+        for (var i = 0; i < results.length; i++) {
+            eindLocatie = L.marker([results[i].geometry.location.lat(), results[i].geometry.location.lng()]).addTo(mymap); //voegt een marker toe
+            eindLocatie.bindPopup(results[i].formatted_address).openPopup; //voegt een popup toe aan de marker met de zoekterm
+            mymap.setView([results[i].geometry.location.lat(), results[i].geometry.location.lng()], zoom); // centreerd de kaart op de gekozen locatie
+        }
+    }
+}
+
+window.name = ""; //Cleart window.name
+
+/**
+ * functie voor berekenen afstand Lat Long naar Meter
+ */
+
+function distanceLatLonM(lat1,lon1,lat2,lon2) {
+        var R = 6371; // Radius of the earth in km
+        var dLat = lat2 * Math.PI / 180 - lat1 * Math.PI / 180;
+        var dLon = lon2 * Math.PI / 180 - lon1 * Math.PI / 180;
+        var a = 
+            Math.sin(dLat/2) * Math.sin(dLat/2) +
+            Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
+            Math.sin(dLon/2) * Math.sin(dLon/2);
+        var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a)); 
+        var d = R * c * 1000; // Distance in m
+        return d;
+}
 
 /**
  * Database Import Taxi locaties
@@ -53,7 +139,7 @@ var taxi = {}
 getJSON(urlTaxi,
     function(data) {
         for (var i in data.coordinates){
-            var taxi = L.marker([data.coordinates[i]["1"], data.coordinates[i]["0"]],{icon: taxiIcon}).addTo(mymap); //voegt een marker toe
+            taxi = L.marker([data.coordinates[i]["1"], data.coordinates[i]["0"]],{icon: taxiIcon}).addTo(mymap); //voegt een marker toe
             taxi.bindPopup("Taxi-standplaats");
         }            
     },
@@ -111,22 +197,26 @@ var urlObjDeLijn = {
 };
 
 var haltesObj = {};
+var haltes = {};
 
 for (var r in urlObjDeLijn){
     getJSON(urlObjDeLijn[r],
         function(data) {
-            for (var i in data.rtLijnRitten){
-                for (var t in data.rtLijnRitten[i].rtDoortochten){
-                    if (data.rtLijnRitten[i].rtDoortochten[t*2] != undefined){
-                    var haltes = L.marker([data.rtLijnRitten[i].rtDoortochten[t*2].coordinaat.lt, data.rtLijnRitten[i].rtDoortochten[t*2].coordinaat.ln],{icon: tramIcon}).addTo(mymap);
-                    haltesObj[data.rtLijnRitten[i].rtDoortochten[t*2].halteNummer] = haltesObj[data.rtLijnRitten[i].rtDoortochten[t*2].halteNummer] + ", " + data.lijnNummerPubliek;
-                    haltesObj[data.rtLijnRitten[i].rtDoortochten[t*2].halteNummer] = haltesObj[data.rtLijnRitten[i].rtDoortochten[t*2].halteNummer].replace('undefined, ', "");
-                    haltes.bindPopup("<b>" + data.rtLijnRitten[i].rtDoortochten[t*2].omschrijvingLang + "</b></br>Lijn(en): " + haltesObj[data.rtLijnRitten[i].rtDoortochten[t*2].halteNummer]);
+                for (var t in data.rtLijnRitten[0].rtDoortochten){
+                    if (data.rtLijnRitten[0].rtDoortochten[t*2] != undefined){
+                        if (distanceLatLonM(data.rtLijnRitten[0].rtDoortochten[t*2].coordinaat.lt, data.rtLijnRitten[0].rtDoortochten[t*2].coordinaat.ln, currentPosition._latlng.lat, currentPosition._latlng.lng)<500 ||
+                        distanceLatLonM(data.rtLijnRitten[0].rtDoortochten[t*2].coordinaat.lt, data.rtLijnRitten[0].rtDoortochten[t*2].coordinaat.ln, eindLocatie._latlng.lat, eindLocatie._latlng.lng)<500){ //Enkel de haltes binnen een straal van 500m van huidige- en eindlocatie worden getoond
+
+                            L.circle([currentPosition._latlng.lat, currentPosition._latlng.lng], {radius: 500, fill: false, weight: 1}).addTo(mymap);
+                            L.circle([eindLocatie._latlng.lat, eindLocatie._latlng.lng], {radius: 500, fill: false, weight: 1}).addTo(mymap);
+
+                            haltes = L.marker([data.rtLijnRitten[0].rtDoortochten[t*2].coordinaat.lt, data.rtLijnRitten[0].rtDoortochten[t*2].coordinaat.ln],{icon: tramIcon}).addTo(mymap);
+                            haltesObj[data.rtLijnRitten[0].rtDoortochten[t*2].halteNummer] = haltesObj[data.rtLijnRitten[0].rtDoortochten[t*2].halteNummer] + ", " + data.lijnNummerPubliek;
+                            haltesObj[data.rtLijnRitten[0].rtDoortochten[t*2].halteNummer] = haltesObj[data.rtLijnRitten[0].rtDoortochten[t*2].halteNummer].replace('undefined, ', "");
+                            haltes.bindPopup("<b>" + data.rtLijnRitten[0].rtDoortochten[t*2].omschrijvingLang + "</b></br>Lijn(en): " + haltesObj[data.rtLijnRitten[0].rtDoortochten[t*2].halteNummer]);
+                        }
                     }
                 }
-                
-            }
-
         },
         function(status) {
             console.log(status);
@@ -135,7 +225,7 @@ for (var r in urlObjDeLijn){
 };
 
 /**
- * Standaardicoon voor popup aanpassen naar nieuw icoon Fietsvoorziening
+ * Standaardicoon voor popup aanpassen naar nieuw icoon Halte
  */
 var tramIcon = L.icon({
     iconUrl: 'images/halte.png',
@@ -148,44 +238,5 @@ var tramIcon = L.icon({
     popupAnchor: [0, -25] //ankerpunt popup
 });
 
-/**
- * Maakt een layergroup overlays
- 
-var overlays = {
-    "Bus- en Tramhaltes": haltes,
-    "Taxi-staanplaatsen": taxi    
-};
-
-/**
- * Maakt een layer controller waarbij de overlays uit of ingeschakeld kunnen worden.
- */
-//L.control.layers("", overlays).addTo(mymap);
-
-/**
- * Haalt de zoekterm van de vorige pagina uit window.name
- * google Places zoekt naar de locatie en maakt een marker op
- * dat bepaalde punt.
- */
-
-var request = {
-    query: window.name
-};
-var mapCenterLat = ""; 
-var mapCenterLng = ""; //variabelen aanmaken voor nieuwe Lat en Lng;
-
-service = new google.maps.places.PlacesService(document.createElement('div'));
-service.textSearch(request, callback);
-function callback(results, status){
-    if (status == google.maps.places.PlacesServiceStatus.OK) {
-        for (var i = 0; i < results.length; i++) {
-            var marker = L.marker([results[i].geometry.location.lat(), results[i].geometry.location.lng()]).addTo(mymap); //voegt een marker toe
-            marker.bindPopup(results[i].formatted_address).openPopup; //voegt een popup toe aan de marker met de zoekterm
-            mymap.setView([results[i].geometry.location.lat(), results[i].geometry.location.lng()], zoom); // centreerd de kaart op de gekozen locatie
-
-        }
-    }
-}
-
-window.name = ""; //Cleart window.name
 
 }
