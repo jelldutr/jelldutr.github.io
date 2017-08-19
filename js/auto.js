@@ -86,10 +86,11 @@ function callback(results, status){
     getJSON(urlParking,
         function(data) {
             for(var i in data){ //for in loop voor elk object
-                
+
                 if (distanceLatLonM(data[i].latitude, data[i].longitude, currentPosition._latlng.lat, currentPosition._latlng.lng)<500||
                     distanceLatLonM(data[i].latitude,data[i].longitude, eindLocatie._latlng.lat, eindLocatie._latlng.lng)<500){
-                        PP.innerHTML = data[i].name + ": " + "<span class='righttextalign'>" + data[i].parkingStatus.availableCapacity + " plaatsen vrij</span></br><hr>";
+                        console.log(PP);
+                        PP.innerHTML = PP.innerHTML + data[i].name + ": " + "<span class='righttextalign'>" + data[i].parkingStatus.availableCapacity + " plaatsen vrij</span></br><hr>";
                     }
 
             }
