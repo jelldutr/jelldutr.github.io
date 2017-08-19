@@ -89,8 +89,7 @@ function callback(results, status){
 
                 if (distanceLatLonM(data[i].latitude, data[i].longitude, currentPosition._latlng.lat, currentPosition._latlng.lng)<500||
                     distanceLatLonM(data[i].latitude,data[i].longitude, eindLocatie._latlng.lat, eindLocatie._latlng.lng)<500){
-                        console.log(PP);
-                        PP.innerHTML = PP.innerHTML + data[i].name + ": " + "<span class='righttextalign'>" + data[i].parkingStatus.availableCapacity + " plaatsen vrij</span></br><hr>";
+                        PP.innerHTML += data[i].name + ": " + "<span class='righttextalign'>" + data[i].parkingStatus.availableCapacity + " plaatsen vrij</span></br><hr>";
                     }
 
             }
@@ -167,13 +166,6 @@ getJSON(urlParking,
         for(var i in data){ //for in loop voor elk object
             var marker = L.marker([data[i].latitude, data[i].longitude],{icon: parkingIcon}).addTo(mymap); //voegt een marker toe
             marker.bindPopup("<h3>"+data[i].name+"</h3><br /> <b> Vrije plaatsen: "+data[i].parkingStatus.availableCapacity+"</b>");
-            function delayParking() {
-            if (distanceLatLonM(data[i].latitude, data[i].longitude, currentPosition._latlng.lat, currentPosition._latlng.lng)<500||
-                 distanceLatLonM(data[i].latitude,data[i].longitude, eindLocatie._latlng.lat, eindLocatie._latlng.lng)<500){
-                    PP.innerHTML = data[i].name + ": " + "<span class='righttextalign'>" + data[i].parkingStatus.availableCapacity + " plaatsen vrij</span></br><hr>";
-                 }
-                }
-            setTimeout(delayParking, 5000);
         }
                 
     },
