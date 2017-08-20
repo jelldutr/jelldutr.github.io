@@ -2,6 +2,7 @@
 ---
 $background-color: #B4D6BA;
 $overlay-color: rgba(255,255,255,0.8);
+$moby-orange: #FFAB48;
 
 /* CLEARFIX*/
 .cf:before,
@@ -76,7 +77,20 @@ body {
             font-weight: 300;
             margin: 10px;
             padding: 0 10px;
+            
         }
+
+        input[type="submit"] {
+                background-color: white;
+            }
+
+        input[type="submit"]:hover {
+                background-color: $moby-orange;
+                color: white;
+                border-color: white;
+        }
+            
+
         select {
             border: 2px solid $background-color;
             border-radius: 10px;
@@ -84,6 +98,27 @@ body {
             font-weight: 300;
             margin: 10px;
             padding: 0 10px;
+        }
+    }
+
+    nav {
+        position: absolute;
+        bottom: 1vh;
+        right: 4%;
+        
+        a {
+            text-decoration: none;
+            color: white;
+            font-size: 1.5em;
+            text-align: right;
+        }
+
+        ul :hover {
+            color: $moby-orange;
+        }
+
+        ul {
+            list-style: none;
         }
     }
 }
@@ -200,7 +235,7 @@ body {
 
 }
 
-@media (max-width: 968px) {
+@media screen and (max-width: 968px) {
     .block {
     width: 47%;
     padding: 0 1%;
@@ -216,7 +251,7 @@ body {
     }
 }
 
-@media (max-width: 767px) {
+@media screen and (max-width: 767px) {
     .block {
     width: 96%;
     padding: 0 2%;
