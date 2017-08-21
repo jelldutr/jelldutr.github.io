@@ -16,6 +16,66 @@ var standardMap = L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.
 
 
 /**
+ * Huidige locatie opvragen en marker zetten
+ */
+
+var currentPosition = {
+    _latlng: {
+        lat: "",
+        lng:""
+    }
+};
+function getLocation() {
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(showPosition,showError);
+    } else {
+        console.log("Geolocation is not supported by this browser.");
+    }
+};
+
+function showPosition(position) {
+    currentPosition = L.marker([position.coords.latitude, position.coords.longitude],{icon: locationIcon}).addTo(mymap);
+    currentPosition.bindPopup("Uw huidige locatie");
+};
+
+function showError(error) {
+    switch(error.code) {
+        case error.PERMISSION_DENIED:
+            console.log("User denied the request for Geolocation.");
+            myLocation = {};
+            break;
+        case error.POSITION_UNAVAILABLE:
+            console.log("Location information is unavailable.");
+            myLocation = {};
+            break;
+        case error.TIMEOUT:
+            console.log("The request to get user location timed out.");
+            myLocation = {};
+            break;
+        case error.UNKNOWN_ERROR:
+            console.log("An unknown error occurred.");
+            myLocation = {};
+            break;
+    }
+}
+getLocation();
+
+/**
+ * Standaardicoon voor popup aanpassen naar nieuw icoon Huidige locatie
+ */
+var locationIcon = L.icon({
+    iconUrl: 'images/huidigelocatieicon.png',
+    shadowUrl: 'images/parkingshadow.png',
+
+    iconSize: [25,41], //grootte van icon
+    shadowSize: [30,21], //grootte van schaduw
+    iconAnchor: [12,41], //ankerpunt icon
+    shadowAnchor: [0,21], // ankerpunt schaduw
+    popupAnchor: [0, -50] //ankerpunt popup
+});
+
+
+/**
  * Database Import Bezetting Parking
 */ 
 
