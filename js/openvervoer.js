@@ -33,8 +33,8 @@ function getLocation() {
 };
 
 function showPosition(position) {
-    currentPosition = L.marker([position.coords.latitude, position.coords.longitude]).addTo(mymap);
-    currentPosition.bindPopup("Hier ben ik");
+    currentPosition = L.marker([position.coords.latitude, position.coords.longitude], {icon: locationIcon}).addTo(mymap);
+    currentPosition.bindPopup("Uw huidige locatie");
 };
 
 function showError(error) {
@@ -59,6 +59,21 @@ function showError(error) {
 }
 getLocation();
 
+
+/**
+ * Standaardicoon voor popup aanpassen naar nieuw icoon Huidige locatie
+ */
+var locationIcon = L.icon({
+    iconUrl: 'images/huidigelocatieicon.png',
+    shadowUrl: 'images/parkingshadow.png',
+
+    iconSize: [25,41], //grootte van icon
+    shadowSize: [30,21], //grootte van schaduw
+    iconAnchor: [12,41], //ankerpunt icon
+    shadowAnchor: [0,21], // ankerpunt schaduw
+    popupAnchor: [0, -50] //ankerpunt popup
+});
+
 /**
  * Haalt de zoekterm van de vorige pagina uit window.name
  * google Places zoekt naar de locatie en maakt een marker op
@@ -75,7 +90,7 @@ service.textSearch(request, callback);
 function callback(results, status){
     if (status == google.maps.places.PlacesServiceStatus.OK) {
         for (var i = 0; i < results.length; i++) {
-            eindLocatie = L.marker([results[i].geometry.location.lat(), results[i].geometry.location.lng()]).addTo(mymap); //voegt een marker toe
+            eindLocatie = L.marker([results[i].geometry.location.lat(), results[i].geometry.location.lng()], {icon: bestemmingIcon}).addTo(mymap); //voegt een marker toe
             eindLocatie.bindPopup(results[i].formatted_address).openPopup; //voegt een popup toe aan de marker met de zoekterm
             mymap.setView([results[i].geometry.location.lat(), results[i].geometry.location.lng()], zoom); // centreerd de kaart op de gekozen locatie
         }
@@ -83,6 +98,20 @@ function callback(results, status){
 }
 
 window.name = ""; //Cleart window.name
+
+/**
+ * Standaardicoon voor popup aanpassen naar nieuw icoon Bestemming
+ */
+var bestemmingIcon = L.icon({
+    iconUrl: 'images/bestemmingicon.png',
+    shadowUrl: 'images/parkingshadow.png',
+
+    iconSize: [25,41], //grootte van icon
+    shadowSize: [30,21], //grootte van schaduw
+    iconAnchor: [12,41], //ankerpunt icon
+    shadowAnchor: [0,21], // ankerpunt schaduw
+    popupAnchor: [0, -50] //ankerpunt popup
+});
 
 /**
  * functie voor berekenen afstand Lat Long naar Meter
@@ -229,13 +258,13 @@ for (var r in urlObjDeLijn){
  */
 var tramIcon = L.icon({
     iconUrl: 'images/halte.png',
-    shadowUrl: 'images/halteshadow.png',
+    shadowUrl: 'images/parkingshadow.png',
 
-    iconSize: [20,24], //grootte van icon
-    shadowSize: [25,24], //grootte van schaduw
-    iconAnchor: [10,24], //ankerpunt icon
-    shadowAnchor: [2,24], // ankerpunt schaduw
-    popupAnchor: [0, -25] //ankerpunt popup
+    iconSize: [25,41], //grootte van icon
+    shadowSize: [30,21], //grootte van schaduw
+    iconAnchor: [12,41], //ankerpunt icon
+    shadowAnchor: [0,21], // ankerpunt schaduw
+    popupAnchor: [0, -50] //ankerpunt popup
 });
 
 

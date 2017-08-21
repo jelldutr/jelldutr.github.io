@@ -76,6 +76,47 @@ var locationIcon = L.icon({
 
 
 /**
+ * Haalt de zoekterm van de vorige pagina uit window.name
+ * google Places zoekt naar de locatie en maakt een marker op
+ * dat bepaalde punt.
+ */
+
+var request = {
+    query: window.name
+};
+var eindLocatie = {};
+var PP = document.createElement("p"); 
+
+
+service = new google.maps.places.PlacesService(document.createElement('div'));
+service.textSearch(request, callback);
+function callback(results, status){
+    if (status == google.maps.places.PlacesServiceStatus.OK) {
+        for (var i = 0; i < results.length; i++) {
+            eindLocatie = L.marker([results[i].geometry.location.lat(), results[i].geometry.location.lng()], {icon: bestemmingIcon}).addTo(mymap); //voegt een marker toe
+            eindLocatie.bindPopup(results[i].formatted_address).openPopup; //voegt een popup toe aan de marker met de zoekterm
+            mymap.setView([results[i].geometry.location.lat(), results[i].geometry.location.lng()], zoom); // centreerd de kaart op de gekozen locatie
+        }
+    }
+}
+
+window.name = ""; //Cleart window.name
+
+/**
+ * Standaardicoon voor popup aanpassen naar nieuw icoon Bestemming
+ */
+var bestemmingIcon = L.icon({
+    iconUrl: 'images/bestemmingicon.png',
+    shadowUrl: 'images/parkingshadow.png',
+
+    iconSize: [25,41], //grootte van icon
+    shadowSize: [30,21], //grootte van schaduw
+    iconAnchor: [12,41], //ankerpunt icon
+    shadowAnchor: [0,21], // ankerpunt schaduw
+    popupAnchor: [0, -50] //ankerpunt popup
+});
+
+/**
  * Database Import Bezetting Parking
 */ 
 
@@ -184,32 +225,4 @@ var bluebikeIcon = L.icon({
     shadowAnchor: [0,21], // ankerpunt schaduw
     popupAnchor: [0, -50] //ankerpunt popup
 });
-
-/**
- * Haalt de zoekterm van de vorige pagina uit window.name
- * google Places zoekt naar de locatie en maakt een marker op
- * dat bepaalde punt.
- */
-
-var request = {
-    query: window.name
-};
-var mapCenterLat = ""; 
-var mapCenterLng = ""; //variabelen aanmaken voor nieuwe Lat en Lng;
-
-service = new google.maps.places.PlacesService(document.createElement('div'));
-service.textSearch(request, callback);
-function callback(results, status){
-    if (status == google.maps.places.PlacesServiceStatus.OK) {
-        for (var i = 0; i < results.length; i++) {
-            var marker = L.marker([results[i].geometry.location.lat(), results[i].geometry.location.lng()]).addTo(mymap); //voegt een marker toe
-            marker.bindPopup(results[i].formatted_address).openPopup; //voegt een popup toe aan de marker met de zoekterm
-            mymap.setView([results[i].geometry.location.lat(), results[i].geometry.location.lng()], zoom); // centreerd de kaart op de gekozen locatie
-
-        }
-    }
-}
-
-window.name = ""; //Cleart window.name
-
 }
