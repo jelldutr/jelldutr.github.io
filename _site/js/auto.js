@@ -75,13 +75,28 @@ var locationIcon = L.icon({
 
 
 /**
- * Haalt de zoekterm van de vorige pagina uit window.name
+ * Haalt de zoekterm van de vorige pagina uit een cookie
  * google Places zoekt naar de locatie en maakt een marker op
  * dat bepaalde punt.
  */
+function getCookie() {
+    var name = "location=";
+    var decodedCookie = decodeURIComponent(document.cookie);
+    var ca = decodedCookie.split(';');
+    for(var i = 0; i <ca.length; i++) {
+        var c = ca[i];
+        while (c.charAt(0) == ' ') {
+            c = c.substring(1);
+        }
+        if (c.indexOf(name) == 0) {
+            return c.substring(name.length, c.length);
+        }
+    }
+    return "";
+}
 
 var request = {
-    query: window.name
+    query: getCookie()
 };
 var eindLocatie = {};
 var PP = document.createElement("p"); 
@@ -218,21 +233,7 @@ getJSON(urlParkinglocaties,
         console.log(status);
     }
 );
-/*
-DATABASE VERKEERSINFORMATE, TE GROOT, TE VEEL INFO
-var urlVerkeersinfo = 'https://datatank.stad.gent/4/mobiliteit/verkeersberichten.json';
 
-getJSON(urlVerkeersinfo,
-    function(data) {
-        for (var i in data.geometry){
-            var marker = L.marker([data.geometry.coordinates[i]["1"], data.geometry.coordinates[i]["0"]],{icon: taxiIcon}).addTo(mymap); //voegt een marker toe
-        }
-        console.log(data);            
-    },
-    function(status) {
-        console.log(status);
-    }
-);*/
 
 /**
  * Standaardicoon voor popup aanpassen naar nieuw icoon Parking

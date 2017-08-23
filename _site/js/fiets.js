@@ -76,13 +76,29 @@ var locationIcon = L.icon({
 
 
 /**
- * Haalt de zoekterm van de vorige pagina uit window.name
+ * Haalt de zoekterm van de vorige pagina uit een cookie
  * google Places zoekt naar de locatie en maakt een marker op
  * dat bepaalde punt.
  */
 
+ function getCookie() {
+    var name = "location=";
+    var decodedCookie = decodeURIComponent(document.cookie);
+    var ca = decodedCookie.split(';');
+    for(var i = 0; i <ca.length; i++) {
+        var c = ca[i];
+        while (c.charAt(0) == ' ') {
+            c = c.substring(1);
+        }
+        if (c.indexOf(name) == 0) {
+            return c.substring(name.length, c.length);
+        }
+    }
+    return "";
+}
+
 var request = {
-    query: window.name
+    query: getCookie()
 };
 var eindLocatie = {};
 var PP = document.createElement("p"); 

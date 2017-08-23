@@ -80,8 +80,24 @@ var locationIcon = L.icon({
  * dat bepaalde punt.
  */
 
+function getCookie() {
+    var name = "location=";
+    var decodedCookie = decodeURIComponent(document.cookie);
+    var ca = decodedCookie.split(';');
+    for(var i = 0; i <ca.length; i++) {
+        var c = ca[i];
+        while (c.charAt(0) == ' ') {
+            c = c.substring(1);
+        }
+        if (c.indexOf(name) == 0) {
+            return c.substring(name.length, c.length);
+        }
+    }
+    return "";
+}
+
 var request = {
-    query: window.name
+    query: getCookie()
 };
 var eindLocatie = {};
 
@@ -191,20 +207,7 @@ var taxiIcon = L.icon({
     popupAnchor: [0, -50] //ankerpunt popup
 });
 
-/* DATA NIET BESCHIKBAAR OP DATA GENT, LATER NOG EENS PROBEREN
-var urlCambio = '';
 
-getJSON(urlCambio,
-    function(data) {
-        for (var i in data.coordinates){
-            var marker = L.marker([data.coordinates[i]["1"], data.coordinates[i]["0"]],{icon: fietsIcon}).addTo(mymap); //voegt een marker toe
-            marker.bindPopup("Taxi's");
-        }            
-    },
-    function(status) {
-        console.log(status);
-    }
-);*/ 
 
 var urlObjDeLijn = {
     1: "https://datatank.stad.gent/4/mobiliteit/delijnhalteslijn1",

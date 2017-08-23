@@ -60,7 +60,7 @@ body {
 
     }
 
-    p {
+    .inputs p {
         display: inline-block;
         font-weight: 300;
         margin: 10px 0;
@@ -369,4 +369,24 @@ body {
         padding-left: 10px;
     }
     
+}
+
+.centerblock {
+    width: 40%;
+    margin: auto;
+    background-color: $overlay-color;
+    border-radius: 7px;
+    padding: 10px;
+    line-height: 1.7em;
+
+    textarea {
+        font-family: 'Montserrat', sans-serif;
+        border: 2px solid $background-color;
+        border-radius: 10px;
+        font-size: 1em;
+        width: 80%;
+        margin: 10px auto;
+        padding: 0 10px;
+        display: block;
+    }
 }
