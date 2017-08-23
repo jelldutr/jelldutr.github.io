@@ -390,3 +390,40 @@ body {
     }
 
 }
+
+.aboutcontactnav {
+    a {
+            text-decoration: none;
+            color: white;
+            font-size: 1.5em;
+            text-align: right;
+        }
+
+        ul :hover {
+            color: $moby-orange;
+        }
+
+        ul {
+            list-style: none;
+        }
+}
+
+.aboutcontact .title {
+        color: $overlay-color;
+        font-size: 3em;
+        text-transform: uppercase;
+        text-align: center;
+}
+
+@media screen and (max-width: 767px) {
+    .centerblock {
+        width: 90%
+    }
+    .aboutcontactnav {
+        position: static;
+    }
+
+    .aboutcontact .title {
+        font-size: 2em;
+    }
+}
