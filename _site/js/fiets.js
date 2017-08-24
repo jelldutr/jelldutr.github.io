@@ -116,7 +116,6 @@ function callback(results, status){
     }
 }
 
-
 /**
  * Standaardicoon voor popup aanpassen naar nieuw icoon Bestemming
  */
