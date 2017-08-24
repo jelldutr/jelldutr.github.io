@@ -62,23 +62,19 @@
 <body>
     <header class="site-header">
   <div class="header-bar cf">
-    <a class="button" href="/">Terug</a>
+    <a class="button" href="#" onclick="history.go(-1); return false;">Terug</a>
     <a class="site-title" href="/">Moby Gent - Fiets</a>
   </div>
 </header>
 
-
-
 <div class="container cf">
-    <div class="verkeersInfo">
-    
-    </div>
     <div class="mapBlock">
         <div id="mapid">
         </div>
     </div>
 
-    <div class="block infoblock" id="legende">
+    <div class="flexhead">
+    <div class="block infoblock flex flexleft" id="legende">
         <h3>Legende voor de kaart</h3>
         <ul class="legende">
             <li id="location">Uw huidige locatie<hr>
@@ -91,23 +87,18 @@
 </li>
         </ul>
     </div>
-
-    <div id="vrijefietsen" class="block infoblock">
+    <div id="vrijefietsen" class="block infoblock flex flexright">
         <h3>Aantal vrije Blue Bike fietsen</h3>
         <div id="fietsen" class="cf">
-
         </div>
     </div>
-
-
-
-
+    </div>
 </div>
 
 <script src="js/main.js"></script>
 
 <!-- Hier komt de structuur van de footer -->
-<footer class="site-footer">
+<footer class="site-footer aboutcontactnav">
     <div class="footer-bar cf">
       <a class="button" href="../about">About</a>
       <a class="button" href="../contact">Contact</a>

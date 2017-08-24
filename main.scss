@@ -33,13 +33,25 @@ body {
     animation-duration: 60s;
     animation-timing-function: linear;
     animation-iteration-count: infinite;
-    
-
 }
 
 .container {
     width: 90%;
     margin: auto;
+}
+
+.flexhead {
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+
+    .flex {
+        flex: 1;
+    }
+
+    .flexright {
+        margin-right: 0;
+    }
 }
 
 .content{
@@ -123,9 +135,42 @@ body {
     }
 }
 
+.contentClean{
+    width: 100%;
+    margin: 0 auto;
+    text-align: center;    
+
+    .title {
+        color: $overlay-color;
+        font-size: 3em;
+        text-transform: uppercase;
+
+    }   
+
+    nav {
+        position: absolute;
+        bottom: 1vh;
+        right: 4%;
+        
+        a {
+            text-decoration: none;
+            color: white;
+            font-size: 1.5em;
+            text-align: right;
+        }
+
+        ul :hover {
+            color: $moby-orange;
+        }
+
+        ul {
+            list-style: none;
+        }
+    }
+}
+
 .inputs {
     display: inline-block;
-    /*width: 300px;*/
     padding: 20px;
     background-color: $overlay-color;
     border-radius: 5px;
@@ -148,16 +193,10 @@ body {
 }
 
 .block {
-    width: 30%;
+    width: 33%;
     min-width: 240px;
     float: left;
     margin: 10px 0;
-
-}
-
-
-#twitter {
-    height: 400px;
 }
 
 .infoblock {
@@ -166,7 +205,6 @@ body {
     border-radius: 4px;
     padding: 0 10px;
 }
-
 
 .rightalign {
     display: block;
@@ -229,7 +267,10 @@ body {
             width: 90%;
             margin: 5px auto;
             text-align: center;
-        }
+            position: static;
+            bottom: 1vh;
+            right: 5%;
+            }        
     
         .button {
             text-decoration: none;
@@ -260,29 +301,28 @@ body {
 
 
 @media screen and (max-width: 968px) {
-    .block {
-    width: 47%;
-    padding: 0 1%;
-    margin: 10px 0;
+    .site-header .button {
+        margin: 10px 0 10px 5px;
+        font-size: 1em;
     }
-
-    #twitter {
-        float: right;
-    }
-
-
-}
-
-@media screen and (max-width: 767px) {
-    .block {
-    width: 96%;
-    padding: 0 2%;
-    margin: 10px 0;
-    }
-
     
     .site-header .site-title {
-        font-size: 1.5em;
+        margin: 2px 0 0 0;
+    }
+}
+
+@media screen and (max-width: 876px) {
+    .flexcenter {
+        margin-right: 0;
+    }  
+    
+    .site-header .button {
+        margin: 10px 0 10px 8px;
+    }
+    
+    .site-header .site-title {
+        font-size: 1.2em;
+        margin: 3px 0 0 0;
     }
 
     .content {
@@ -303,6 +343,12 @@ body {
         right: 10%;
     }
 
+}
+
+@media screen and (max-width: 576px) {
+    .flexleft {
+        margin-right: 0;
+    }
 }
 
 .legende {
@@ -391,28 +437,11 @@ body {
 
 }
 
-.aboutcontactnav {
-    a {
-            text-decoration: none;
-            color: white;
-            font-size: 1.5em;
-            text-align: right;
-        }
-
-        ul :hover {
-            color: $moby-orange;
-        }
-
-        ul {
-            list-style: none;
-        }
-}
-
-.aboutcontact .title {
-        color: $overlay-color;
-        font-size: 3em;
-        text-transform: uppercase;
-        text-align: center;
+.contentClean .title {
+    color: $overlay-color;
+    font-size: 3em;
+    text-transform: uppercase;
+    text-align: center;
 }
 
 @media screen and (max-width: 767px) {
@@ -423,7 +452,7 @@ body {
         position: static;
     }
 
-    .aboutcontact .title {
+    .contentClean .title {
         font-size: 2em;
     }
 }

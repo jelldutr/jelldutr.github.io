@@ -1,7 +1,7 @@
 window.onload = function() {
 
 var gent = [51.054344, 3.721660]; // Start locatie
-var zoom = 12; //Start zoom
+var zoom = 14; //Start zoom
 /**
  * Map Setup Leaflet & Mapbox
  */
